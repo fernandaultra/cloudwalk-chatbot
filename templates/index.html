@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudWalk Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('{{ url_for('static', filename='fundo tela cloudwalk.webp') }}');
+      background-size: cover;
+      background-position: center;
+      color: #ffffff;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    header img {
+      height: 60px;
+      margin-right: 1rem;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input[type="text"] {
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff3f81;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .chat-entry {
+      display: flex;
+      align-items: flex-start;
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    .chat-entry.user {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .chat-entry strong {
+      display: block;
+      color: #ff3f81;
+      margin-bottom: 4px;
+    }
+    .history {
+      margin-top: 2rem;
+    }
+    .avatar {
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+    .message-content {
+      flex: 1;
+    }
+    @media (max-width: 600px) {
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo cloudwalk.webp') }}" alt="CloudWalk logo" />
+    <h1>CloudWalk Chatbot</h1>
+  </header>
+  <main>
+    <form method="POST">
+      <input type="text" name="question" placeholder="Digite sua pergunta aqui..." value="{{ question }}" required />
+      <button type="submit">Enviar</button>
+    </form>
+
+    {% if answer %}
+    <div class="chat-entry">
+      <img class="avatar" src="{{ url_for('static', filename='CloudWalk_logo_redonda.png') }}" alt="bot">
+      <div class="message-content">
+        <strong>Bot:</strong> <div>{{ answer | safe }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history">
+      <h2>Histórico de Conversas</h2>
+      {% for q, a in history %}
+      <div class="chat-entry user">
+        <img class="avatar" src="{{ url_for('static', filename='Avatar profissional em estilo Roblox.png') }}" alt="avatar">
+        <div class="message-content">
+          <strong>Você:</strong> {{ q }}
+        </div>
+      </div>
+      <div class="chat-entry">
+        <img class="avatar" src="{{ url_for('static', filename='CloudWalk_logo_redonda.png') }}" alt="bot">
+        <div class="message-content">
+          <strong>Bot:</strong> {{ a | safe }}
+        </div>
+      </div>
+      {% endfor %}
+      <form method="GET" action="/reset">
+        <button style="margin-top: 1rem; background-color: #999">Limpar Histórico</button>
+      </form>
+    </div>
+    {% endif %}
+  </main>
+</body>
+</html>
