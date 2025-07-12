@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from utils.rag_pipeline import ask_question
+import os  # ✅ Importa o os para ler a variável de ambiente PORT
 
 app = Flask(__name__)
 
@@ -30,5 +31,8 @@ def reset():
     global chat_history
     chat_history = []
     return redirect("/")
+
+# ✅ Configura porta dinâmica para Render
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
