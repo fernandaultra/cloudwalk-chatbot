@@ -1,0 +1,60 @@
+CloudWalk é uma fintech brasileira que oferece soluções de pagamento e serviços financeiros para pequenos e médios negócios. Fundada em São Paulo, a empresa combina blockchain, inteligência artificial (IA) e filosofia tecnológica para transformar o setor de pagamentos.
+
+🌐 Produtos:
+- InfinitePay: Plataforma no Brasil com maquininhas, conta digital PJ, cashback, Pix ilimitado, links de pagamento, loja online, empréstimos inteligentes e o InfiniteTap (smartphone como maquininha).
+- JIM.com: Plataforma nos EUA voltada para micro e pequenos empreendedores com assistente de IA e pagamentos instantâneos.
+
+🚀 Tecnologias:
+- Blockchain própria com alto desempenho (Stratus) e stablecoin BRLC
+- Sistema antifraude com múltiplas camadas (transacional, comportamental, relacional)
+- Modelos proprietários de crédito que usam dados alternativos e comportamento real
+- Projeto Consciousness: integração sensorial, agência e simulação de consciência em LLMs
+- LLMs aplicados em atendimento ao cliente, vetores de comerciantes, e sistemas de recomendação
+
+🎯 Missão:
+Democratizar acesso financeiro, empoderar pequenos negócios e transformar o sistema de pagamentos através da tecnologia.
+
+🧠 Filosofia:
+Inspirada por ideias como “Fiat Lux”, a CloudWalk vê o avanço tecnológico como uma
+
+## Produtos:
+- **Stratus**: Plataforma de infraestrutura financeira da CloudWalk. Acesse: https://www.cloudwalk.io/stratus
+- **Fiat Lux**: Solução com inteligência artificial voltada para geração de imagens e interfaces visuais. Saiba mais: https://www.cloudwalk.io/fiat-lux
+- **CloudWalk AI**: Soluções de IA integradas ao sistema de pagamentos. Página: https://www.cloudwalk.io/ai
+
+## Código de Ética
+A empresa mantém um compromisso com valores éticos. Consulte o código: https://www.cloudwalk.io/code-of-ethics-and-conduct
+
+## Vagas e cultura
+A CloudWalk está contratando! Confira as vagas disponíveis: https://www.cloudwalk.io/jobs
+
+## Investidores
+Informações sobre os investidores que apoiam a CloudWalk: https://www.cloudwalk.io/#investors
+
+## Notícias e mídia
+Central de notícias e atualizações: https://www.cloudwalk.io/newsroom
+
+# InfinitePay: Solução da CloudWalk
+**InfinitePay** é uma solução da CloudWalk voltada para pequenas e médias empresas. Principais produtos:
+
+- Maquininhas de cartão
+- Conta digital PJ
+- Cashback
+- Pix ilimitado
+- Links de pagamento
+- Loja online
+- Empréstimos inteligentes
+- InfiniteTap (smartphone como maquininha)
+
+Site oficial: https://www.infinitepay.io/
+
+## Central de Ajuda
+Dúvidas sobre o uso da InfinitePay? Acesse a central de suporte:
+🔗 https://ajuda.infinitepay.io/pt-BR/
+
+## Materiais Educativos e Comerciais
+Acesse e baixe materiais explicativos sobre os serviços da InfinitePay:
+📚 https://www.infinitepay.io/materiais#section_search
+
+# Outros
+- Plataforma Jim (link citado pela CloudWalk): https://www.jim.com/
