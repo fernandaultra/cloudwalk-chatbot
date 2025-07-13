@@ -6,3 +6,5 @@ python-dotenv
 numpy
 scikit-learn
 markdown
+langchain
+tiktoken

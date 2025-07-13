@@ -1,38 +1,45 @@
-import openai
 import os
-import markdown
+import pickle
+from langchain.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQA
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import TextLoader
+from langchain.docstore.document import Document
 
-# Inicializa o cliente OpenAI com sua chave
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Inicializa o modelo e embeddings
+llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", api_key=os.getenv("OPENAI_API_KEY"))
+embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Carrega o corpus com informações da CloudWalk
-with open("data/cloudwalk_corpus.txt", "r", encoding="utf-8") as file:
-    context = file.read()
+# Caminhos
+CORPUS_FILE = "utils/cloudwalk_corpus.txt"
+INDEX_PATH = "utils/vector_store/faiss_index"
 
-def ask_question(question):
-    """
-    Usa Retrieval-Augmented Generation simples com contexto estático do arquivo.
-    Gera uma resposta do modelo da OpenAI com suporte a Markdown.
-    """
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # Ou gpt-4, se você tiver acesso
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "Você é um assistente da CloudWalk. "
-                    "Responda de forma clara e didática, usando Markdown sempre que possível "
-                    "(**negrito**, *itálico*, listas, links etc). Use linguagem natural. "
-                    "Baseie-se no contexto abaixo:\n\n"
-                    + context
-                ),
-            },
-            {"role": "user", "content": question},
-        ],
-        temperature=0.7,
-        max_tokens=800,
-    )
+# Função para carregar documentos
+def load_documents():
+    with open(CORPUS_FILE, "r", encoding="utf-8") as file:
+        text = file.read()
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    docs = splitter.create_documents([text])
+    return docs
 
-    answer = response.choices[0].message.content
-    return markdown.markdown(answer)
+# Cria o vetor FAISS se não existir
+def create_vector_store():
+    docs = load_documents()
+    vectorstore = FAISS.from_documents(docs, embeddings)
+    vectorstore.save_local(INDEX_PATH)
 
+# Carrega o FAISS já salvo
+def load_vector_store():
+    return FAISS.load_local(INDEX_PATH, embeddings)
+
+# Pipeline de pergunta e resposta
+def ask_question(query):
+    if not os.path.exists(INDEX_PATH):
+        create_vector_store()
+    vectorstore = load_vector_store()
+    retriever = vectorstore.as_retriever()
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever, return_source_documents=False)
+    result = qa_chain.run(query)
+    return result
