@@ -6,6 +6,12 @@ python-dotenv
 numpy
 scikit-learn
 markdown
-langchain
 tiktoken
 pytest
+
+# Pacotes atualizados do LangChain
+langchain
+langchain-community
+langchain-openai
+
+
