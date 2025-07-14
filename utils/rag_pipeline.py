@@ -1,11 +1,10 @@
 import os
-
 from dotenv import load_dotenv
 
 # 🔐 Carrega variáveis de ambiente do .env
 load_dotenv()
 
-# ✅ NOVAS IMPORTAÇÕES ATUALIZADAS (evita warnings e problemas futuros)
+# ✅ Importações atualizadas
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
@@ -45,7 +44,7 @@ def load_vector_store():
     return FAISS.load_local(
         INDEX_PATH,
         embeddings,
-        allow_dangerous_deserialization=True  # ✅ Corrige o erro
+        allow_dangerous_deserialization=True  # ✅ Corrige o erro do Render
     )
 
 # 💬 Pipeline principal de pergunta e resposta
@@ -54,10 +53,24 @@ def ask_question(query):
         create_vector_store()
     vectorstore = load_vector_store()
     retriever = vectorstore.as_retriever()
+
+    # 📝 Prompt com instruções de Markdown
+    prompt_inicial = f"""
+Responda à pergunta abaixo com linguagem clara e objetiva, usando **Markdown estruturado**:
+
+- Use listas com "-"
+- Use **negrito** para destacar
+- Organize por tópicos, se necessário
+- Evite parágrafos muito longos
+
+📌 Pergunta:
+{query}
+    """
+
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
         retriever=retriever,
         return_source_documents=False
     )
-    result = qa_chain.run(query)
+    result = qa_chain.run(prompt_inicial)
     return result
