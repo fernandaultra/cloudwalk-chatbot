@@ -4,14 +4,14 @@ from dotenv import load_dotenv
 # 🔐 Carrega variáveis de ambiente do .env
 load_dotenv()
 
-# ✅ Importações atualizadas
+# ✅ Importações atualizadas e compatíveis com LangChain 0.1+
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-# 🤖 Inicializa LLM e Embeddings com API Key do .env
+# 🤖 Inicializa LLM e Embeddings com API Key
 llm = ChatOpenAI(
     temperature=0,
     model_name="gpt-3.5-turbo",
@@ -30,38 +30,39 @@ def load_documents():
     with open(CORPUS_FILE, "r", encoding="utf-8") as file:
         text = file.read()
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-    docs = splitter.create_documents([text])
-    return docs
+    return splitter.create_documents([text])
 
-# 🧠 Cria índice vetorial com FAISS se não existir
+# 🧠 Cria índice vetorial com FAISS se ainda não existir
 def create_vector_store():
     docs = load_documents()
     vectorstore = FAISS.from_documents(docs, embeddings)
     vectorstore.save_local(INDEX_PATH)
 
-# 🔁 Carrega índice FAISS salvo — com permissão para desserialização segura
+# 🔁 Carrega índice FAISS salvo
 def load_vector_store():
     return FAISS.load_local(
         INDEX_PATH,
         embeddings,
-        allow_dangerous_deserialization=True  # ✅ Corrige o erro do Render
+        allow_dangerous_deserialization=True
     )
 
 # 💬 Pipeline principal de pergunta e resposta
 def ask_question(query):
+    # ⚠️ Verifica se o índice existe
     if not os.path.exists(INDEX_PATH):
         create_vector_store()
+
     vectorstore = load_vector_store()
     retriever = vectorstore.as_retriever()
 
-    # 📝 Prompt com instruções de Markdown
+    # 📝 Prompt com Markdown estruturado
     prompt_inicial = f"""
-Responda à pergunta abaixo com linguagem clara e objetiva, usando **Markdown estruturado**:
+Responda à pergunta abaixo com clareza e organização, seguindo estas instruções:
 
-- Use listas com "-"
-- Use **negrito** para destacar
-- Organize por tópicos, se necessário
-- Evite parágrafos muito longos
+- Use **negrito** para destacar conceitos importantes
+- Liste benefícios ou itens com `-`
+- Quando citar links, use a sintaxe: [Texto do link](https://exemplo.com)
+- Evite blocos grandes de texto corrido. Use tópicos!
 
 📌 Pergunta:
 {query}
@@ -72,5 +73,6 @@ Responda à pergunta abaixo com linguagem clara e objetiva, usando **Markdown es
         retriever=retriever,
         return_source_documents=False
     )
-    result = qa_chain.run(prompt_inicial)
-    return result
+
+    resposta = qa_chain.run(prompt_inicial)
+    return resposta
